@@ -15,7 +15,12 @@ import { DashboardModule } from "./components/dashboard/dashboard.module";
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: ["environment/.env.development.local", ".env", ".env.example"],
+      envFilePath: [
+        "environment/.env.development.local",
+        ".env",
+        ".env.example",
+        ".environment/.env.development.production",
+      ],
     }),
     DatabaseModule,
     AuthModule,

@@ -104,8 +104,8 @@ export class Loan {
   @Column("decimal", { precision: 10, scale: 2, default: 0 })
   remainingBalance: number;
 
-  @Column({ nullable: true })
-  nextPaymentDate: Date | null;
+  @Column({ type: "timestamp", nullable: true })
+  nextPaymentDate: Date;
 
   @ManyToOne(() => User, user => user.createdLoans)
   @JoinColumn({ name: "createdById" })

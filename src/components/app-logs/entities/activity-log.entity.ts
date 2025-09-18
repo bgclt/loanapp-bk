@@ -6,34 +6,34 @@ export class ActivityLog {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column()
+  @Column({ type: "varchar" })
   action: string;
 
-  @Column()
+  @Column({ type: "varchar" })
   resource: string;
 
-  @Column({ nullable: true })
-  resourceId: string;
+  @Column({ type: "uuid", nullable: true })
+  resourceId: string | null;
 
-  @Column("json", { nullable: true })
-  oldData: any;
+  @Column({ type: "jsonb", nullable: true })
+  oldData: Record<string, any> | null;
 
-  @Column("json", { nullable: true })
-  newData: any;
+  @Column({ type: "jsonb", nullable: true })
+  newData: Record<string, any> | null;
 
-  @Column({ nullable: true })
-  ipAddress: string;
+  @Column({ type: "varchar", nullable: true })
+  ipAddress: string | null;
 
-  @Column({ nullable: true })
-  userAgent: string;
+  @Column({ type: "varchar", nullable: true })
+  userAgent: string | null;
 
-  @ManyToOne(() => User, user => user.activityLogs)
+  @ManyToOne(() => User, user => user.activityLogs, { onDelete: "SET NULL" })
   @JoinColumn({ name: "userId" })
   user: User;
 
-  @Column()
-  userId: string;
+  @Column({ type: "uuid", nullable: true })
+  userId: string | null;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: "timestamp with time zone" })
   createdAt: Date;
 }

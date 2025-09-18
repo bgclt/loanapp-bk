@@ -6,36 +6,36 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
-} from "typeorm"
-import { Loan } from "./loan.entity"
+} from "typeorm";
+import { Loan } from "./loan.entity";
 
 @Entity("business_locations")
 export class BusinessLocation {
   @PrimaryGeneratedColumn("uuid")
-  id: string
+  id: string;
 
   @Column()
-  name: string
+  name: string;
 
   @Column()
-  address: string
+  address: string;
 
   @Column({ nullable: true })
-  gpsAddress: string
+  gpsAddress: string;
 
   @Column()
-  region: string
+  region: string;
 
   @ManyToOne(() => Loan)
   @JoinColumn({ name: "loanId" })
-  loan: Loan
+  loan: Loan;
 
   @Column()
-  loanId: string
+  loanId: string;
 
   @CreateDateColumn()
-  createdAt: Date
+  createdAt: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date
+  updatedAt: Date;
 }

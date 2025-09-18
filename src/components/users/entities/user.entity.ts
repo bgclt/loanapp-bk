@@ -40,13 +40,13 @@ export class User {
   @Column({ default: true })
   isActive: boolean;
 
-  @Column({ nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
   emailVerifiedAt: Date;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   resetPasswordToken: string | null;
 
-  @Column({ nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
   resetPasswordExpires: Date | null;
 
   @ManyToMany(() => Role, role => role.users)
