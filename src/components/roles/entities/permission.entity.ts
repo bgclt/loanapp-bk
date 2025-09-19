@@ -6,16 +6,16 @@ export class Permission {
   @PrimaryGeneratedColumn("uuid")
   id: string
 
-  @Column({ unique: true })
+  @Column({ type: 'varchar', unique: true })
   name: string
 
-  @Column()
+  @Column({ type: 'varchar' })
   description: string
 
-  @Column()
+  @Column({ type: 'varchar' })
   resource: string
 
-  @Column()
+  @Column({ type: 'varchar' })
   action: string
 
   @ManyToMany(

@@ -14,23 +14,23 @@ export class Residence {
   @PrimaryGeneratedColumn("uuid")
   id: string
 
-  @Column()
+  @Column({ type: 'varchar' })
   name: string
 
-  @Column()
+  @Column({ type: 'text' })
   address: string
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   gpsAddress: string
 
-  @Column()
+  @Column({ type: 'varchar' })
   region: string
 
   @ManyToOne(() => Loan)
   @JoinColumn({ name: "loanId" })
   loan: Loan
 
-  @Column()
+  @Column({ type: 'uuid' })
   loanId: string
 
   @CreateDateColumn()

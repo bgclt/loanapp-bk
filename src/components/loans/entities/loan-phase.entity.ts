@@ -14,10 +14,10 @@ export class LoanPhase {
   })
   phase: LoanStatus
 
-  @Column()
+  @Column({ type: 'text' })
   notes: string
 
-  @Column("json", { nullable: true })
+  @Column({ type: 'json', nullable: true })
   data: any
 
   @ManyToOne(
@@ -27,14 +27,14 @@ export class LoanPhase {
   @JoinColumn({ name: "loanId" })
   loan: Loan
 
-  @Column()
+  @Column({ type: 'uuid' })
   loanId: string
 
   @ManyToOne(() => User)
   @JoinColumn({ name: "processedById" })
   processedBy: User
 
-  @Column()
+  @Column({ type: 'uuid' })
   processedById: string
 
   @CreateDateColumn()

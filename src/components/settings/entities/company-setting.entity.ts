@@ -5,16 +5,16 @@ export class CompanySetting {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column({ unique: true })
+  @Column({ type: 'varchar', unique: true })
   key: string;
 
-  @Column("text")
+  @Column({ type: 'text' })
   value: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'text', nullable: true })
   description: string;
 
-  @Column({ default: "string" })
+  @Column({ type: 'varchar', default: "string" })
   type: string;
 
   @CreateDateColumn()

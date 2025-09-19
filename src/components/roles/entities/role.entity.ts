@@ -15,13 +15,13 @@ export class Role {
   @PrimaryGeneratedColumn("uuid")
   id: string
 
-  @Column({ unique: true })
+  @Column({ type: 'varchar', unique: true })
   name: string
 
-  @Column()
+  @Column({ type: 'varchar' })
   description: string
 
-  @Column({ default: true })
+  @Column({ type: 'boolean', default: true })
   isActive: boolean
 
   @ManyToMany(

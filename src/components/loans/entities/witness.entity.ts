@@ -15,10 +15,10 @@ export class Witness {
   @PrimaryGeneratedColumn("uuid")
   id: string
 
-  @Column()
+  @Column({ type: 'varchar' })
   fullname: string
 
-  @Column()
+  @Column({ type: 'varchar' })
   contact: string
 
   @Column({
@@ -27,23 +27,23 @@ export class Witness {
   })
   maritalStatus: MaritalStatus
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   email: string
 
-  @Column()
+  @Column({ type: 'varchar' })
   occupation: string
 
-  @Column()
+  @Column({ type: 'text' })
   residenceAddress: string
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   residenceGps: string
 
   @ManyToOne(() => Loan)
   @JoinColumn({ name: "loanId" })
   loan: Loan
 
-  @Column()
+  @Column({ type: 'uuid' })
   loanId: string
 
   @CreateDateColumn()

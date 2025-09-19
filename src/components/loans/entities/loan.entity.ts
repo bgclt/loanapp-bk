@@ -19,26 +19,26 @@ export class Loan {
   id: string;
 
   // Registration Phase (Phase 1)
-  @Column()
+  @Column({ type: 'varchar' })
   clientFullname: string;
 
-  @Column()
+  @Column({ type: 'varchar' })
   clientContact: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   clientEmail: string;
 
-  @Column()
+  @Column({ type: 'varchar' })
   clientLocation: string;
 
   @Column("decimal", { precision: 10, scale: 2 })
   requestedAmount: number;
 
-  @Column()
+  @Column({ type: 'varchar' })
   clientBusiness: string;
 
   // Capturing Phase (Phase 2)
-  @Column({ nullable: true })
+  @Column({ type: 'date', nullable: true })
   dateOfBirth: Date;
 
   @Column({
@@ -48,10 +48,10 @@ export class Loan {
   })
   maritalStatus: MaritalStatus;
 
-  @Column({ nullable: true })
+  @Column({ type: 'text', nullable: true })
   clientProfile: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   clientOccupation: string;
 
   @Column({
@@ -61,14 +61,14 @@ export class Loan {
   })
   idType: IdType;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   idNumber: string;
 
   // Approval Phase (Phase 3)
   @Column("decimal", { precision: 10, scale: 2, nullable: true })
   approvedAmount: number;
 
-  @Column({ nullable: true })
+  @Column({ type: 'int', nullable: true })
   loanDuration: number; // in months
 
   @Column({
@@ -78,17 +78,17 @@ export class Loan {
   })
   paymentSchedule: PaymentSchedule;
 
-  @Column({ nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
   approvalDate: Date;
 
-  @Column({ nullable: true })
+  @Column({ type: 'text', nullable: true })
   approvalNotes: string;
 
   // Disbursement Phase (Phase 4)
-  @Column({ nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
   disbursementDate: Date;
 
-  @Column({ nullable: true })
+  @Column({ type: 'text', nullable: true })
   disbursementNotes: string;
 
   @Column({
@@ -111,21 +111,21 @@ export class Loan {
   @JoinColumn({ name: "createdById" })
   createdBy: User;
 
-  @Column({ nullable: true })
+  @Column({ type: 'uuid', nullable: true })
   createdById: string;
 
   @ManyToOne(() => User, user => user.approvedLoans)
   @JoinColumn({ name: "approvedById" })
   approvedBy: User;
 
-  @Column({ nullable: true })
+  @Column({ type: 'uuid', nullable: true })
   approvedById: string;
 
   @ManyToOne(() => User, user => user.disbursedLoans)
   @JoinColumn({ name: "disbursedById" })
   disbursedBy: User;
 
-  @Column({ nullable: true })
+  @Column({ type: 'uuid', nullable: true })
   disbursedById: string;
 
   @OneToMany(() => LoanPhase, phase => phase.loan)

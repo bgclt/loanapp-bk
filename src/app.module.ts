@@ -20,6 +20,7 @@ import { DashboardModule } from "./components/dashboard/dashboard.module";
         ".env",
         ".env.example",
         ".environment/.env.development.production",
+        ".env.local",
       ],
     }),
     DatabaseModule,

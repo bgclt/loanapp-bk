@@ -10,13 +10,13 @@ export class Payment {
   @Column("decimal", { precision: 10, scale: 2 })
   amount: number
 
-  @Column()
+  @Column({ type: 'timestamp' })
   paymentDate: Date
 
-  @Column({ nullable: true })
+  @Column({ type: 'text', nullable: true })
   notes: string
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   receiptNumber: string
 
   @ManyToOne(
@@ -26,14 +26,14 @@ export class Payment {
   @JoinColumn({ name: "loanId" })
   loan: Loan
 
-  @Column()
+  @Column({ type: 'uuid' })
   loanId: string
 
   @ManyToOne(() => User)
   @JoinColumn({ name: "receivedById" })
   receivedBy: User
 
-  @Column()
+  @Column({ type: 'uuid' })
   receivedById: string
 
   @CreateDateColumn()
