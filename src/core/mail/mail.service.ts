@@ -10,11 +10,14 @@ export class MailService {
 
   constructor(private configService: ConfigService) {
     // Configure AWS SES
-    AWS.config.update({
+    const awsConfig: any = {
       accessKeyId: this.configService.get("AWS_ACCESS_KEY_ID"),
       secretAccessKey: this.configService.get("AWS_SECRET_ACCESS_KEY"),
       region: this.configService.get("AWS_REGION"),
-    });
+      sessionToken: this.configService.get("AWS_SESSION_TOKEN"),
+    };
+
+    AWS.config.update(awsConfig);
 
     this.ses = new AWS.SES({ apiVersion: "2010-12-01" });
     this.fromEmail = this.configService.get<string>("SES_FROM_EMAIL") ?? "";

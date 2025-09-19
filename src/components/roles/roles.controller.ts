@@ -1,4 +1,4 @@
-import { Controller, Param, UseGuards } from "@nestjs/common";
+import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards } from "@nestjs/common";
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from "@nestjs/swagger";
 import { RolesService } from "./roles.service";
 import { PermissionsService } from "./permissions.service";
@@ -24,14 +24,16 @@ export class RolesController {
   ) {}
 
   // Role endpoints
+  @Post()
   @ApiOperation({ summary: "Create a new role" })
   @ApiResponse({ status: 201, description: "Role created successfully" })
   @ApiResponse({ status: 400, description: "Bad request" })
   @Permissions(Permission.CAN_CREATE_ROLES)
-  createRole(createRoleDto: CreateRoleDto) {
+  createRole(@Body() createRoleDto: CreateRoleDto) {
     return this.rolesService.create(createRoleDto);
   }
 
+  @Get()
   @ApiOperation({ summary: "Get all roles" })
   @ApiResponse({ status: 200, description: "Roles retrieved successfully" })
   @Permissions(Permission.CAN_LIST_ROLES)
@@ -39,6 +41,7 @@ export class RolesController {
     return this.rolesService.findAll();
   }
 
+  @Get(":id")
   @ApiOperation({ summary: "Get role by ID" })
   @ApiResponse({ status: 200, description: "Role retrieved successfully" })
   @ApiResponse({ status: 404, description: "Role not found" })
@@ -47,14 +50,16 @@ export class RolesController {
     return this.rolesService.findOne(id);
   }
 
+  @Put(":id")
   @ApiOperation({ summary: "Update role" })
   @ApiResponse({ status: 200, description: "Role updated successfully" })
   @ApiResponse({ status: 404, description: "Role not found" })
   @Permissions(Permission.CAN_UPDATE_ROLES)
-  updateRole(@Param("id") id: string, updateRoleDto: UpdateRoleDto) {
+  updateRole(@Param("id") id: string, @Body() updateRoleDto: UpdateRoleDto) {
     return this.rolesService.update(id, updateRoleDto);
   }
 
+  @Delete(":id")
   @ApiOperation({ summary: "Delete role" })
   @ApiResponse({ status: 200, description: "Role deleted successfully" })
   @ApiResponse({ status: 404, description: "Role not found" })
@@ -63,14 +68,16 @@ export class RolesController {
     return this.rolesService.remove(id);
   }
 
+  @Post(":id/permissions")
   @ApiOperation({ summary: "Assign permissions to role" })
   @ApiResponse({ status: 200, description: "Permissions assigned successfully" })
   @ApiResponse({ status: 404, description: "Role not found" })
   @Permissions(Permission.CAN_UPDATE_ROLES)
-  assignPermissions(@Param("id") id: string, assignPermissionsDto: AssignPermissionsDto) {
+  assignPermissions(@Param("id") id: string, @Body() assignPermissionsDto: AssignPermissionsDto) {
     return this.rolesService.assignPermissions(id, assignPermissionsDto);
   }
 
+  @Post("seed")
   @ApiOperation({ summary: "Seed default roles" })
   @ApiResponse({ status: 200, description: "Default roles seeded successfully" })
   @Permissions(Permission.ALL)
@@ -79,13 +86,15 @@ export class RolesController {
   }
 
   // Permission endpoints
+  @Post("permissions")
   @ApiOperation({ summary: "Create a new permission" })
   @ApiResponse({ status: 201, description: "Permission created successfully" })
   @Permissions(Permission.CAN_CREATE_ROLES)
-  createPermission(createPermissionDto: CreatePermissionDto) {
+  createPermission(@Body() createPermissionDto: CreatePermissionDto) {
     return this.permissionsService.create(createPermissionDto);
   }
 
+  @Get("permissions")
   @ApiOperation({ summary: "Get all permissions" })
   @ApiResponse({ status: 200, description: "Permissions retrieved successfully" })
   @Permissions(Permission.CAN_LIST_ROLES)
@@ -93,6 +102,7 @@ export class RolesController {
     return this.permissionsService.findAll();
   }
 
+  @Get("permissions/:id")
   @ApiOperation({ summary: "Get permission by ID" })
   @ApiResponse({ status: 200, description: "Permission retrieved successfully" })
   @ApiResponse({ status: 404, description: "Permission not found" })
@@ -101,14 +111,16 @@ export class RolesController {
     return this.permissionsService.findOne(id);
   }
 
+  @Put("permissions/:id")
   @ApiOperation({ summary: "Update permission" })
   @ApiResponse({ status: 200, description: "Permission updated successfully" })
   @ApiResponse({ status: 404, description: "Permission not found" })
   @Permissions(Permission.CAN_UPDATE_ROLES)
-  updatePermission(@Param("id") id: string, updatePermissionDto: UpdatePermissionDto) {
+  updatePermission(@Param("id") id: string, @Body() updatePermissionDto: UpdatePermissionDto) {
     return this.permissionsService.update(id, updatePermissionDto);
   }
 
+  @Delete("permissions/:id")
   @ApiOperation({ summary: "Delete permission" })
   @ApiResponse({ status: 200, description: "Permission deleted successfully" })
   @ApiResponse({ status: 404, description: "Permission not found" })
@@ -117,6 +129,7 @@ export class RolesController {
     return this.permissionsService.remove(id);
   }
 
+  @Post("permissions/seed")
   @ApiOperation({ summary: "Seed default permissions" })
   @ApiResponse({ status: 200, description: "Default permissions seeded successfully" })
   @Permissions(Permission.ALL)

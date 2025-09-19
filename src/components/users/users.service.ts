@@ -4,12 +4,15 @@ import { Repository } from "typeorm";
 import { User } from "./entities/user.entity";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
+import { Role } from "../roles/entities/role.entity";
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
+    @InjectRepository(Role)
+    private readonly rolesRepository: Repository<Role>,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
@@ -89,5 +92,33 @@ export class UsersService {
     if (result.affected === 0) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
+  }
+
+  async assignRole(userId: string, roleName: string): Promise<User> {
+    const user = await this.usersRepository.findOne({
+      where: { id: userId },
+      relations: ["roles"],
+    });
+
+    if (!user) {
+      throw new NotFoundException(`User with ID ${userId} not found`);
+    }
+
+    const role = await this.rolesRepository.findOne({
+      where: { name: roleName },
+    });
+
+    if (!role) {
+      throw new NotFoundException(`Role with name ${roleName} not found`);
+    }
+
+    // Check if user already has this role
+    const hasRole = user.roles.some(userRole => userRole.name === roleName);
+    if (!hasRole) {
+      user.roles.push(role);
+      await this.usersRepository.save(user);
+    }
+
+    return this.findByIdWithRoles(userId);
   }
 }

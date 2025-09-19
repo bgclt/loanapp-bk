@@ -56,18 +56,21 @@ export class AuthService {
       password: hashedPassword,
     });
 
+    // Assign Owner role to new user
+    const userWithRoles = await this.usersService.assignRole(user.id, "Owner");
+
     // Generate JWT token
     const payload = { email: user.email, sub: user.id };
 
     return {
       access_token: this.jwtService.sign(payload),
       user: {
-        id: user.id,
-        email: user.email,
-        fullname: user.fullname,
-        phone: user.phone,
-        companyName: user.companyName,
-        roles: [],
+        id: userWithRoles.id,
+        email: userWithRoles.email,
+        fullname: userWithRoles.fullname,
+        phone: userWithRoles.phone,
+        companyName: userWithRoles.companyName,
+        roles: userWithRoles.roles.map(role => role.name),
       },
     };
   }
