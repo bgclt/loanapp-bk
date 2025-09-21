@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards } from "@nestjs/common";
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from "@nestjs/swagger";
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from "@nestjs/swagger";
 import { RolesService } from "./roles.service";
 import { PermissionsService } from "./permissions.service";
 import { CreateRoleDto } from "./dto/create-role.dto";
@@ -26,6 +26,7 @@ export class RolesController {
   // Role endpoints
   @Post()
   @ApiOperation({ summary: "Create a new role" })
+  @ApiBody({ type: CreateRoleDto })
   @ApiResponse({ status: 201, description: "Role created successfully" })
   @ApiResponse({ status: 400, description: "Bad request" })
   @Permissions(Permission.CAN_CREATE_ROLES)
@@ -52,6 +53,7 @@ export class RolesController {
 
   @Put(":id")
   @ApiOperation({ summary: "Update role" })
+  @ApiBody({ type: UpdateRoleDto })
   @ApiResponse({ status: 200, description: "Role updated successfully" })
   @ApiResponse({ status: 404, description: "Role not found" })
   @Permissions(Permission.CAN_UPDATE_ROLES)
@@ -70,6 +72,7 @@ export class RolesController {
 
   @Post(":id/permissions")
   @ApiOperation({ summary: "Assign permissions to role" })
+  @ApiBody({ type: AssignPermissionsDto })
   @ApiResponse({ status: 200, description: "Permissions assigned successfully" })
   @ApiResponse({ status: 404, description: "Role not found" })
   @Permissions(Permission.CAN_UPDATE_ROLES)
@@ -88,6 +91,7 @@ export class RolesController {
   // Permission endpoints
   @Post("permissions")
   @ApiOperation({ summary: "Create a new permission" })
+  @ApiBody({ type: CreatePermissionDto })
   @ApiResponse({ status: 201, description: "Permission created successfully" })
   @Permissions(Permission.CAN_CREATE_ROLES)
   createPermission(@Body() createPermissionDto: CreatePermissionDto) {
@@ -113,6 +117,7 @@ export class RolesController {
 
   @Put("permissions/:id")
   @ApiOperation({ summary: "Update permission" })
+  @ApiBody({ type: UpdatePermissionDto })
   @ApiResponse({ status: 200, description: "Permission updated successfully" })
   @ApiResponse({ status: 404, description: "Permission not found" })
   @Permissions(Permission.CAN_UPDATE_ROLES)

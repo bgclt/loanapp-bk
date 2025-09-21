@@ -1,5 +1,5 @@
-import { Controller, Get, Post, Patch, Param, Delete, UseGuards, Request, Query } from "@nestjs/common"
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from "@nestjs/swagger"
+import { Controller, Get, Post, Patch, Param, Delete, UseGuards, Request, Query, Body } from "@nestjs/common"
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery, ApiBody } from "@nestjs/swagger"
 import { LoansService } from "./loans.service"
 import { PaymentsService } from "./payments.service"
 import { CreateLoanDto } from "./dto/create-loan.dto"
@@ -27,10 +27,11 @@ export class LoansController {
 
   // Loan endpoints
   @ApiOperation({ summary: "Create a new loan (Registration Phase)" })
+  @ApiBody({ type: CreateLoanDto })
   @ApiResponse({ status: 201, description: "Loan created successfully" })
   @Permissions(Permission.CAN_CREATE_LOANS)
   @Post()
-  create(createLoanDto: CreateLoanDto, @Request() req) {
+  create(@Body() createLoanDto: CreateLoanDto, @Request() req) {
     return this.loansService.create(createLoanDto, req.user)
   }
 
@@ -53,29 +54,32 @@ export class LoansController {
   }
 
   @ApiOperation({ summary: "Update loan capturing phase (Phase 2)" })
+  @ApiBody({ type: UpdateLoanCapturingDto })
   @ApiResponse({ status: 200, description: "Loan updated successfully" })
   @ApiResponse({ status: 400, description: "Bad request" })
   @Permissions(Permission.CAN_UPDATE_LOANS)
   @Patch(":id/capturing")
-  updateCapturing(@Param('id') id: string, updateLoanCapturingDto: UpdateLoanCapturingDto, @Request() req) {
+  updateCapturing(@Param('id') id: string, @Body() updateLoanCapturingDto: UpdateLoanCapturingDto, @Request() req) {
     return this.loansService.updateCapturing(id, updateLoanCapturingDto, req.user)
   }
 
   @ApiOperation({ summary: "Approve loan (Phase 3)" })
+  @ApiBody({ type: ApproveLoanDto })
   @ApiResponse({ status: 200, description: "Loan approved successfully" })
   @ApiResponse({ status: 400, description: "Bad request" })
   @Permissions(Permission.CAN_APPROVE_LOANS)
   @Patch(":id/approve")
-  approve(@Param('id') id: string, approveLoanDto: ApproveLoanDto, @Request() req) {
+  approve(@Param('id') id: string, @Body() approveLoanDto: ApproveLoanDto, @Request() req) {
     return this.loansService.approve(id, approveLoanDto, req.user)
   }
 
   @ApiOperation({ summary: "Disburse loan (Phase 4)" })
+  @ApiBody({ type: DisburseLoanDto })
   @ApiResponse({ status: 200, description: "Loan disbursed successfully" })
   @ApiResponse({ status: 400, description: "Bad request" })
   @Permissions(Permission.CAN_DISBURSE_LOANS)
   @Patch(":id/disburse")
-  disburse(@Param('id') id: string, disburseLoanDto: DisburseLoanDto, @Request() req) {
+  disburse(@Param('id') id: string, @Body() disburseLoanDto: DisburseLoanDto, @Request() req) {
     return this.loansService.disburse(id, disburseLoanDto, req.user)
   }
 
@@ -124,10 +128,11 @@ export class LoansController {
 
   // Payment endpoints
   @ApiOperation({ summary: "Create a payment" })
+  @ApiBody({ type: CreatePaymentDto })
   @ApiResponse({ status: 201, description: "Payment created successfully" })
   @Permissions(Permission.CAN_CREATE_PAYMENTS)
   @Post("payments")
-  createPayment(createPaymentDto: CreatePaymentDto, @Request() req) {
+  createPayment(@Body() createPaymentDto: CreatePaymentDto, @Request() req) {
     return this.paymentsService.create(createPaymentDto, req.user)
   }
 
@@ -158,10 +163,11 @@ export class LoansController {
   }
 
   @ApiOperation({ summary: "Update payment" })
+  @ApiBody({ type: UpdatePaymentDto })
   @ApiResponse({ status: 200, description: "Payment updated successfully" })
   @Permissions(Permission.CAN_UPDATE_PAYMENTS)
   @Patch("payments/:id")
-  updatePayment(@Param('id') id: string, updatePaymentDto: UpdatePaymentDto, @Request() req) {
+  updatePayment(@Param('id') id: string, @Body() updatePaymentDto: UpdatePaymentDto, @Request() req) {
     return this.paymentsService.update(id, updatePaymentDto, req.user)
   }
 

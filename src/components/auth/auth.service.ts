@@ -27,8 +27,22 @@ export class AuthService {
     const payload = { email: user.email, sub: user.id };
     const userWithRoles = await this.usersService.findByIdWithRoles(user.id);
 
+    // Generate reset token and expiry
+    const resetToken = randomBytes(32).toString('hex');
+    const resetExpires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+
+    // Update user with reset token
+    await this.usersService.updateResetToken(userWithRoles.id, resetToken, resetExpires);
+
+    // Generate JWT token
+    const jwtToken = this.jwtService.sign(payload);
+    console.log('AuthService - Generated JWT payload:', payload);
+    console.log('AuthService - Generated JWT token (first 50 chars):', jwtToken.substring(0, 50) + '...');
+
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: jwtToken,
+      reset_token: resetToken,
+      reset_token_expires: resetExpires,
       user: {
         id: userWithRoles.id,
         email: userWithRoles.email,
@@ -59,11 +73,7 @@ export class AuthService {
     // Assign Owner role to new user
     const userWithRoles = await this.usersService.assignRole(user.id, "Owner");
 
-    // Generate JWT token
-    const payload = { email: user.email, sub: user.id };
-
     return {
-      access_token: this.jwtService.sign(payload),
       user: {
         id: userWithRoles.id,
         email: userWithRoles.email,
@@ -72,6 +82,7 @@ export class AuthService {
         companyName: userWithRoles.companyName,
         roles: userWithRoles.roles.map(role => role.name),
       },
+      message: "User registered successfully. Please login to get access token.",
     };
   }
 
@@ -113,5 +124,60 @@ export class AuthService {
     return {
       message: "Password reset successful",
     };
+  }
+
+  async resetToken(resetToken: string) {
+    const user = await this.usersService.findByResetToken(resetToken);
+    if (!user || !user.resetPasswordExpires || user.resetPasswordExpires < new Date()) {
+      throw new BadRequestException("Invalid or expired reset token");
+    }
+
+    // Generate new JWT token
+    const payload = { email: user.email, sub: user.id };
+    const userWithRoles = await this.usersService.findByIdWithRoles(user.id);
+
+    // Generate new reset token and expiry
+    const newResetToken = randomBytes(32).toString('hex');
+    const resetExpires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+
+    // Update user with new reset token
+    await this.usersService.updateResetToken(user.id, newResetToken, resetExpires);
+
+    return {
+      access_token: this.jwtService.sign(payload),
+      reset_token: newResetToken,
+      reset_token_expires: resetExpires,
+      user: {
+        id: userWithRoles.id,
+        email: userWithRoles.email,
+        fullname: userWithRoles.fullname,
+        phone: userWithRoles.phone,
+        companyName: userWithRoles.companyName,
+        roles: userWithRoles.roles.map(role => role.name),
+      },
+    };
+  }
+
+  async verifyEmail(token: string) {
+    const user = await this.usersService.findByResetToken(token);
+    if (!user || !user.resetPasswordExpires || user.resetPasswordExpires < new Date()) {
+      throw new BadRequestException("Invalid or expired verification token");
+    }
+
+    // Update user email verification status
+    await this.usersService.update(user.id, { emailVerifiedAt: new Date() });
+
+    // Clear the reset token
+    await this.usersService.updateResetToken(user.id, null, null);
+
+    return { message: "Email verified successfully" };
+  }
+
+  async getUserWithRoles(userId: string) {
+    return this.usersService.findByIdWithRoles(userId);
+  }
+
+  verifyJwtToken(token: string) {
+    return this.jwtService.verify(token);
   }
 }

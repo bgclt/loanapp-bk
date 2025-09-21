@@ -1,5 +1,5 @@
-import { Controller, Get, Patch, Delete, Body, UseGuards, Post } from "@nestjs/common";
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from "@nestjs/swagger";
+import { Controller, Get, Patch, Delete, Body, UseGuards, Post, Param } from "@nestjs/common";
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from "@nestjs/swagger";
 import { SettingsService } from "./settings.service";
 import { UpdateSettingDto } from "./dto/update-setting.dto";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
@@ -97,7 +97,7 @@ export class SettingsController {
   @ApiResponse({ status: 404, description: "Setting not found" })
   @Permissions(Permission.CAN_VIEW_SETTINGS)
   @Get(":key")
-  findOne(key: string) {
+  findOne(@Param("key") key: string) {
     return this.settingsService.findByKey(key);
   }
 
@@ -105,6 +105,7 @@ export class SettingsController {
     summary: "Update or create setting",
     description: "Update an existing setting or create a new one if it doesn't exist.",
   })
+  @ApiBody({ type: UpdateSettingDto })
   @ApiResponse({
     status: 200,
     description: "Setting updated successfully",
@@ -123,7 +124,7 @@ export class SettingsController {
   })
   @Permissions(Permission.CAN_UPDATE_SETTINGS)
   @Patch(":key")
-  update(key: string, @Body() updateSettingDto: UpdateSettingDto) {
+  update(@Param("key") key: string, @Body() updateSettingDto: UpdateSettingDto) {
     return this.settingsService.updateSetting(key, updateSettingDto);
   }
 
@@ -156,7 +157,7 @@ export class SettingsController {
   @ApiResponse({ status: 404, description: "Setting not found" })
   @Permissions(Permission.CAN_UPDATE_SETTINGS)
   @Delete(":key")
-  remove(key: string) {
+  remove(@Param("key") key: string) {
     return this.settingsService.remove(key);
   }
 }

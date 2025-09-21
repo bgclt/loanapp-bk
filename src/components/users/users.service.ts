@@ -72,7 +72,7 @@ export class UsersService {
     return this.findOne(id);
   }
 
-  async updateResetToken(id: string, token: string, expires: Date): Promise<void> {
+  async updateResetToken(id: string, token: string | null, expires: Date | null): Promise<void> {
     await this.usersRepository.update(id, {
       resetPasswordToken: token,
       resetPasswordExpires: expires,

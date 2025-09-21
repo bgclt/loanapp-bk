@@ -1,5 +1,5 @@
-import { Controller, Get, Post, Patch, Param, Delete, UseGuards } from "@nestjs/common";
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from "@nestjs/swagger";
+import { Controller, Get, Post, Patch, Param, Delete, UseGuards, Body } from "@nestjs/common";
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from "@nestjs/swagger";
 import { UsersService } from "./users.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
@@ -17,11 +17,12 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @ApiOperation({ summary: "Create a new user" })
+  @ApiBody({ type: CreateUserDto })
   @ApiResponse({ status: 201, description: "User created successfully" })
   @ApiResponse({ status: 403, description: "Forbidden" })
   @Permissions(Permission.CAN_CREATE_USERS)
   @Post()
-  create(createUserDto: CreateUserDto) {
+  create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
@@ -43,11 +44,12 @@ export class UsersController {
   }
 
   @ApiOperation({ summary: "Update user" })
+  @ApiBody({ type: UpdateUserDto })
   @ApiResponse({ status: 200, description: "User updated successfully" })
   @ApiResponse({ status: 404, description: "User not found" })
   @Permissions(Permission.CAN_UPDATE_USERS)
   @Patch(":id")
-  update(@Param("id") id: string, updateUserDto: UpdateUserDto) {
+  update(@Param("id") id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }
 
