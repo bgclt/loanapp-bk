@@ -1,242 +1,255 @@
-# Loan Management System API
+# Loan Management System
 
-A comprehensive NestJS-based loan management system with role-based access control, built with PostgreSQL and Amazon SES integration.
+A comprehensive loan management system built with Node.js, TypeScript, Express, and PostgreSQL. Features a multi-phase loan workflow, role-based access control, automated notifications, and comprehensive reporting.
 
 ## 🚀 Features
 
 ### Core Functionality
-- **4-Phase Loan Management**: Registration → Capturing → Approval → Disbursement
-- **Role-Based Access Control**: 7 predefined roles with granular permissions
-- **Payment Tracking**: Complete payment lifecycle with automated balance calculations
-- **Email Notifications**: Amazon SES integration for automated communications
-- **Activity Logging**: Comprehensive audit trail for all system operations
-- **Advanced Reporting**: Dashboard statistics, trends, and export capabilities
+- **Multi-Phase Loan Workflow**: Registration → Capturing → Approval → Disbursement
+- **Role-Based Access Control**: Owner, Admin, Manager, Sales Executive, Loan Officer, Credit Risk Analyst, Call Center, Viewer
+- **User Management**: Complete CRUD operations with email verification
+- **Client Management**: Detailed client information with witnesses, business locations, and residences
+- **Loan Processing**: Full lifecycle management from application to completion
+- **Repayment Tracking**: Automated schedule generation and payment recording
 
-### Loan Phases
-1. **Registration Phase** - Initial loan application (Call Center)
-2. **Capturing Phase** - Detailed information collection (Sales Executive/Loan Officer)
-3. **Approval Phase** - Loan assessment and approval (Credit Risk Analyst)
-4. **Disbursement Phase** - Fund distribution (Manager)
+### Advanced Features
+- **Comprehensive Reporting**: Dashboard statistics, expected repayments, defaulter reports, loan statements
+- **Email Notifications**: SMTP (Nodemailer) integration with automated reminders and status updates
+- **System Logging**: Complete audit trail of all system activities
+- **Data Export**: Export reports in various formats
+- **Company Settings**: Configurable company information and branding
 
-### Predefined Roles
-- **Owner** - Full system access
-- **Admin** - All permissions except log deletion
-- **Viewer** - Read-only access to all data
-- **Manager** - Loan disbursement and reporting
-- **Call Center** - Loan registration
-- **Sales Executive/Loan Officer** - Loan capturing
-- **Credit Risk Analyst** - Loan approval
+### Technical Features
+- **RESTful API**: Well-structured endpoints with comprehensive documentation
+- **JWT Authentication**: Secure token-based authentication
+- **Input Validation**: Joi-based request validation
+- **Rate Limiting**: Protection against abuse
+- **Error Handling**: Comprehensive error management
+- **Swagger Documentation**: Interactive API documentation
+- **Database Migrations**: Automated database setup and seeding
 
 ## 🛠️ Technology Stack
 
-- **Framework**: NestJS with TypeScript
-- **Database**: PostgreSQL with TypeORM
-- **Authentication**: JWT with Passport
-- **Email Service**: Amazon SES
-- **Documentation**: Swagger/OpenAPI
-- **Validation**: Class Validator & Class Transformer
+- **Backend**: Node.js, TypeScript, Express.js
+- **Database**: PostgreSQL
+- **Authentication**: JWT (JSON Web Tokens)
+- **Email Service**: Nodemailer (SMTP)
+- **Documentation**: Swagger/OpenAPI 3.0
+- **Validation**: Joi
+- **Logging**: Winston
+- **Security**: Helmet, CORS, Rate Limiting
 
 ## 📋 Prerequisites
 
-- Node.js (v16 or higher)
+- Node.js (v18 or higher)
 - PostgreSQL (v12 or higher)
-- AWS Account (for SES)
+- SMTP account (e.g., Gmail, Outlook, or any SMTP provider)
+- npm or yarn package manager
 
-## 🔧 Installation
+## 🚀 Quick Start
 
-1. **Clone the repository**
-   \`\`\`bash
-   git clone <repository-url>
-   cd nestjs-loans
-   \`\`\`
-
-2. **Install dependencies**
-   \`\`\`bash
-   npm install
-   \`\`\`
-
-3. **Environment Configuration**
-   \`\`\`bash
-   cp .env.example .env
-   \`\`\`
-   
-   Update the `.env` file with your configuration:
-   \`\`\`env
-   # Database
-   DB_HOST=localhost
-   DB_PORT=5432
-   DB_USERNAME=postgres
-   DB_PASSWORD=your_password
-   DB_NAME=nestjs_loans
-
-   # JWT
-   JWT_SECRET=your-super-secret-jwt-key
-   JWT_EXPIRES_IN=7d
-
-   # AWS SES
-   AWS_REGION=us-east-1
-   AWS_ACCESS_KEY_ID=your-aws-access-key
-   AWS_SECRET_ACCESS_KEY=your-aws-secret-key
-   SES_FROM_EMAIL=noreply@yourcompany.com
-
-   # Frontend URL (for email links)
-   FRONTEND_URL=http://localhost:3000
-
-   # App
-   PORT=3000
-   NODE_ENV=development
-   \`\`\`
-
-4. **Database Setup**
-   \`\`\`bash
-   # Create database
-   createdb nestjs_loans
-
-   # Run migrations (if using migrations)
-   npm run typeorm:migration:run
-   \`\`\`
-
-5. **Seed Default Data**
-   \`\`\`bash
-   # Seed permissions and roles
-   npm run seed:permissions-roles
-   \`\`\`
-
-## 🚀 Running the Application
-
+### 1. Clone the Repository
 \`\`\`bash
-# Development
-npm run start:dev
-
-# Production build
-npm run build
-npm run start:prod
+git clone <repository-url>
+cd loan-management-system
 \`\`\`
 
-The application will be available at:
-- **API**: http://localhost:3000
-- **Swagger Documentation**: http://localhost:3000/api/docs
+### 2. Install Dependencies
+\`\`\`bash
+npm install
+\`\`\`
+
+### 3. Environment Configuration
+Copy the example environment file and configure your settings:
+\`\`\`bash
+cp .env.example .env
+\`\`\`
+
+Update the `.env` file with your configuration:
+\`\`\`env
+# Database
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=your_password
+DB_NAME=loan_app
+
+# JWT
+JWT_SECRET=your_jwt_secret_key
+JWT_EXPIRES_IN=7d
+
+# SMTP (Nodemailer)
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=465
+SMTP_SECURE=true
+SMTP_USER=your_email@example.com
+SMTP_PASS=your_app_password
+SMTP_FROM=noreply@loan.com
+
+# Frontend URL (for email links)
+FRONTEND_URL=http://localhost:3000
+
+# App
+PORT=3000
+NODE_ENV=development
+\`\`\`
+
+### 4. Database Setup
+Run the automated setup script:
+\`\`\`bash
+npm run setup
+\`\`\`
+
+This will:
+- Create the database schema
+- Insert default roles and permissions
+- Create sample users for testing
+
+### 5. Start the Development Server
+\`\`\`bash
+npm run dev
+\`\`\`
+
+The API will be available at `http://localhost:3000`
 
 ## 📚 API Documentation
 
+Once the server is running, visit:
+- **Swagger UI**: `http://localhost:3000/api-docs`
+- **OpenAPI JSON**: `http://localhost:3000/api-docs.json`
+- **Health Check**: `http://localhost:3000/health`
+
+## 👥 Default User Accounts
+
+The system comes with pre-configured user accounts for testing:
+
+| Role | Email | Password | Permissions |
+|------|-------|----------|-------------|
+| Owner | owner@loan.com | Owner123! | Full system access |
+| Admin | admin@loan.com | Admin123! | All operations except log deletion |
+| Call Center | callcenter@loan.com | CallCenter123! | Loan registration |
+| Sales Executive | sales@loan.com | Sales123! | Loan capturing |
+| Credit Risk Analyst | analyst@loan.com | Analyst123! | Loan approval |
+| Manager | manager@loan.com | Manager123! | Loan disbursement |
+
+## 🔄 Loan Workflow
+
+### Phase 1: Registration
+- **Role**: Call Center
+- **Actions**: Create client profile, capture basic loan request
+- **Data**: Name, contact, location, requested amount
+
+### Phase 2: Capturing
+- **Role**: Sales Executive / Loan Officer
+- **Actions**: Collect detailed client information
+- **Data**: Personal details, witnesses, business locations, residences
+
+### Phase 3: Approval
+- **Role**: Credit Risk Analyst
+- **Actions**: Review and approve/modify loan terms
+- **Data**: Approved amount, duration, payment schedule
+
+### Phase 4: Disbursement
+- **Role**: Manager
+- **Actions**: Release funds to client
+- **Data**: Disbursement confirmation, payment schedule activation
+
+## 📊 API Endpoints
+
 ### Authentication
-All endpoints (except auth) require JWT authentication. Include the token in the Authorization header:
-\`\`\`
-Authorization: Bearer <your-jwt-token>
-\`\`\`
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/login` - User login
+- `POST /api/auth/forgot-password` - Request password reset
+- `POST /api/auth/reset-password` - Reset password
+- `GET /api/auth/verify-email` - Verify email address
+- `GET /api/auth/profile` - Get user profile
 
-### Key Endpoints
+### User Management
+- `GET /api/users` - List users
+- `POST /api/users` - Create user
+- `GET /api/users/:id` - Get user details
+- `PUT /api/users/:id` - Update user
+- `DELETE /api/users/:id` - Delete user
+- `GET /api/users/roles` - Get all roles
 
-#### Authentication
-- `POST /auth/login` - User login
-- `POST /auth/register` - User registration
-- `POST /auth/forgot-password` - Request password reset
-- `POST /auth/reset-password` - Reset password
+### Loan Management
+- `GET /api/loans` - List loans
+- `POST /api/loans/register` - Register new loan (Phase 1)
+- `PUT /api/loans/:id/capture` - Capture loan details (Phase 2)
+- `PUT /api/loans/:id/approve` - Approve loan (Phase 3)
+- `PUT /api/loans/:id/disburse` - Disburse loan (Phase 4)
+- `GET /api/loans/:id` - Get loan details
+- `GET /api/loans/:id/repayments` - Get repayment schedule
+- `POST /api/loans/:id/repayments` - Record payment
 
-#### Loan Management
-- `POST /loans` - Create loan (Registration Phase)
-- `PATCH /loans/:id/capturing` - Update capturing phase
-- `PATCH /loans/:id/approve` - Approve loan
-- `PATCH /loans/:id/disburse` - Disburse loan
-- `GET /loans` - List all loans
-- `GET /loans/:id/statement` - Get loan statement
+### Reports
+- `GET /api/reports/dashboard` - Dashboard statistics
+- `GET /api/reports/expected-repayments` - Expected repayments
+- `GET /api/reports/loan-defaulters` - Defaulter report
+- `GET /api/reports/repayments-received` - Payment history
+- `GET /api/reports/loan-statement/:id` - Individual loan statement
+- `GET /api/reports/export/:type` - Export reports
 
-#### Payments
-- `POST /loans/payments` - Record payment
-- `GET /loans/payments` - List payments
-- `GET /loans/payments/date-range` - Payments by date range
+### Settings
+- `GET /api/settings/company` - Get company settings
+- `PUT /api/settings/company` - Update company settings
 
-#### Reports
-- `GET /reports/dashboard` - Dashboard statistics
-- `GET /reports/defaulters` - Defaulter report
-- `GET /reports/loans/trends` - Loan trends
-- `GET /reports/export` - Export reports
+### Notifications
+- `POST /api/notifications/repayment-reminders` - Send payment reminders
+- `POST /api/notifications/overdue-notifications` - Send overdue notices
+- `GET /api/notifications/test-email` - Test email configuration
 
-#### User & Role Management
-- `GET /users` - List users
-- `POST /roles` - Create role
-- `POST /roles/:id/permissions` - Assign permissions
+## 🔒 Security Features
 
-## 🔐 Permission System
-
-The system uses a granular permission system with the following pattern:
-- `CAN_CREATE_<RESOURCE>` - Create new records
-- `CAN_UPDATE_<RESOURCE>` - Update existing records
-- `CAN_DELETE_<RESOURCE>` - Delete records
-- `CAN_VIEW_<RESOURCE>` - View individual records
-- `CAN_LIST_<RESOURCE>` - List multiple records
-- `CAN_GET_<RESOURCE>` - Get specific record details
-
-Special permissions:
-- `CAN_APPROVE_LOANS` - Approve loan applications
-- `CAN_DISBURSE_LOANS` - Disburse approved loans
-- `CAN_EXPORT_REPORTS` - Export system reports
-- `ALL` - All permissions (Owner role only)
-
-## 📊 Reporting Features
-
-### Dashboard Statistics
-- Total loans by status
-- User statistics
-- Financial summaries (disbursed, collected, outstanding)
-
-### Trend Analysis
-- Monthly loan creation trends
-- Payment collection trends
-- Performance metrics
-
-### Specialized Reports
-- **Defaulter Report** - Clients with overdue payments
-- **Collection Report** - Payments within date range
-- **Loan Statement** - Individual loan payment history
+- **JWT Authentication**: Secure token-based authentication
+- **Role-Based Access Control**: Granular permissions system
+- **Input Validation**: Comprehensive request validation
+- **Rate Limiting**: Protection against brute force attacks
+- **Password Hashing**: bcrypt with salt rounds
+- **CORS Protection**: Configurable cross-origin policies
+- **Helmet Security**: Security headers and protections
 
 ## 📧 Email Notifications
 
-Automated email notifications for:
-- Welcome emails for new users
+The system supports automated email notifications for:
+- User registration and email verification
 - Password reset requests
-- Loan status updates
+- Loan approval notifications
+- Loan disbursement confirmations
 - Payment reminders
-- Payment confirmations
+- Overdue payment notices
+- Welcome emails for new users
 
-## 🔍 Activity Logging
+## 🗄️ Database Schema
 
-All system activities are logged including:
-- User actions (CREATE, UPDATE, DELETE)
-- Resource changes with before/after data
-- User information and timestamps
-- IP addresses and user agents
+The system uses PostgreSQL with the following main tables:
+- `users` - User accounts and authentication
+- `roles` - User roles and permissions
+- `clients` - Loan applicant information
+- `loans` - Loan records and workflow status
+- `loan_repayments` - Payment schedules and history
+- `system_logs` - Audit trail and activity logs
+- `company_settings` - System configuration
 
-## 🧪 Testing
+## 🚀 Deployment
 
+### Production Build
 \`\`\`bash
-# Unit tests
-npm run test
-
-# E2E tests
-npm run test:e2e
-
-# Test coverage
-npm run test:cov
+npm run build
+npm start
 \`\`\`
 
-## 📦 Deployment
-
-### Using Docker
-\`\`\`bash
-# Build image
-docker build -t loan-management-api .
-
-# Run container
-docker run -p 3000:3000 --env-file .env loan-management-api
-\`\`\`
-
-### Environment Variables for Production
-Ensure all environment variables are properly set in your production environment, especially:
+### Environment Variables
+Ensure all production environment variables are properly configured:
 - Database connection details
 - JWT secret (use a strong, unique secret)
-- AWS credentials for SES
+- SMTP credentials
 - Frontend URL for email links
+
+### Database Migration
+\`\`\`bash
+npm run migrate
+\`\`\`
 
 ## 🤝 Contributing
 
@@ -246,23 +259,22 @@ Ensure all environment variables are properly set in your production environment
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📄 License
+## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🆘 Support
 
 For support and questions:
-- Check the [API Documentation](http://localhost:3000/api/docs)
-- Review the codebase and comments
 - Create an issue in the repository
+- Check the API documentation at `/api-docs`
+- Review the system logs for troubleshooting
 
 ## 🔄 Version History
 
-- **v1.0.0** - Initial release with complete loan management system
-  - 4-phase loan processing
+- **v1.0.0** - Initial release with complete loan management workflow
+  - Multi-phase loan processing
   - Role-based access control
-  - Payment tracking
-  - Email notifications
   - Comprehensive reporting
-  - Activity logging
+  - Email notifications
+  - API documentation
