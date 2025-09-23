@@ -3,7 +3,7 @@
 .env
 /.pnp
 .pnp.js
-.env.example
+.env
 
 
 # Logs
